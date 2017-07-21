@@ -392,7 +392,36 @@ impl Parser {
                     Token::List(res)
                 }
             }
-            Tag::Item => Token::Item(res),
+            Tag::Item => {
+                println!("Item: {:?}", res);
+                if let Some(&Token::Str(ref txt)) = res.last() {
+                    if txt.starts_with("[x]") {
+                        Token::Item(vec![Token::Task(true, vec![Token::Str(String::from(&txt[3..]))])])
+                    }
+                    else if txt.starts_with("[ ]") {
+                        Token::Item(vec![Token::Task(false, vec![Token::Str(String::from(&txt[3..]))])])
+                    }
+                    else {
+                        Token::Item(res.clone())   
+                    }                    
+                }
+                else {
+                    Token::Item(res.clone())
+                }
+                // match v.last() {
+                //     Some(&Token::Item(ref elems)) |
+                //     Some(&Token::Paragraph(ref elems)) => {
+                //         println!("Item: {:?}", elems);
+                //         if let Some(&Token::Str(ref txt)) = elems.last() {                        
+                //             println!("TXT: {}", txt);
+                //         }
+                //         else {
+                //             Token::Item(res)   
+                //         }
+                //     }
+                //     _ => Token::Item(res)   
+                // }
+            }
             Tag::BlockQuote => {
                 self.features.blockquote = true;
                 Token::BlockQuote(res)

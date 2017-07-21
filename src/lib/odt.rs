@@ -194,6 +194,11 @@ impl<'a> OdtRenderer<'a> {
                 format!("<text:list-item>\n<text:p>{}</text:p></text:list-item>",
                         self.render_vec(vec))
             }
+            Token::Task(checked, ref vec) => {
+                let state = if checked { "checked" } else {"unchecked"};
+                format!("<form:checkbox form:current-state=\"{}\">\n<text:p>{}</text:p></form:checkbox>",
+                        state, self.render_vec(vec))                
+            }
             Token::Link(ref url, _, ref vec) => {
                 format!("<text:a xlink:type=\"simple\"  xlink:href=\"{}\">{}</text:a>",
                         url,

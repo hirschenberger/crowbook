@@ -62,6 +62,8 @@ pub enum Token {
     OrderedList(usize, Vec<Token>),
     /// Item of a list
     Item(Vec<Token>),
+    /// Task list item
+    Task(bool, Vec<Token>),
 
     /// Table with number of rows, and a list of `TableHead` and `TableRows`
     Table(i32, Vec<Token>),
@@ -117,6 +119,7 @@ impl Token {
             List(ref v) |
             OrderedList(_, ref v) |
             Item(ref v) |
+            Task(_, ref v) |
             Table(_, ref v) |
             TableHead(ref v) |
             TableRow(ref v) |
@@ -149,6 +152,7 @@ impl Token {
             List(ref mut v) |
             OrderedList(_, ref mut v) |
             Item(ref mut v) |
+            Task(_, ref mut v) |
             Table(_, ref mut v) |
             TableHead(ref mut v) |
             TableRow(ref mut v) |
@@ -209,7 +213,7 @@ impl Token {
                 | Token::Header(..) | Token::Emphasis(..) | Token::Strong(..)
                 | Token::List(..) | Token::OrderedList(..) | Token::Table(..)
                 | Token::TableHead(..) | Token::TableRow(..) | Token::Footnote(..)
-                | Token::TableCell(..) | Token::Annotation(..) | Token::Item(..)
+                | Token::TableCell(..) | Token::Annotation(..) | Token::Item(..) | Token::Task(..)
                 | Token::BlockQuote(..) => true,
             _ => false,
         }

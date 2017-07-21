@@ -533,6 +533,10 @@ impl<'a> HtmlRenderer<'a> {
                            this.render_vec(vec)?))
             }
             Token::Item(ref vec) => Ok(format!("<li>{}</li>\n", this.render_vec(vec)?)),
+            Token::Task(checked, ref vec) => {
+                let checked_str = if checked {"checked"} else {""};
+                Ok(format!("<input type = \"checkbox\" {}>{}", checked_str, this.render_vec(vec)?))   
+            }            
             Token::Link(ref url, ref title, ref vec) => {
                 let url = escape::html(url.as_ref());
                 let url = if ResourceHandler::is_local(&url) {

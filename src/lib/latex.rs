@@ -429,6 +429,15 @@ impl<'a> Renderer for LatexRenderer<'a> {
                 Ok(result)
             },
             Token::Item(ref vec) => Ok(format!("\\item {}\n", self.render_vec(vec)?)),
+            Token::Task(checked, ref vec) => {
+                if checked {
+                    Ok(format!("\\makebox[0pt][l]{{$\\square$}}\\raisebox{{.15ex}}{{\\hspace{{0.1em}}$\\checkmark$}} {}", 
+                               self.render_vec(vec)?))
+                }
+                else {
+                    Ok(format!("$\\square$ {}", self.render_vec(vec)?))
+                }
+            }
             Token::Link(ref url, _, ref vec) => {
                 let content = self.render_vec(vec)?;
 
